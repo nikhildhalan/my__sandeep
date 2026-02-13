@@ -10,7 +10,6 @@
 <style>
 :root{
     --night:#030712;
-    --deep:#0f172a;
     --pinkGlow:#f9a8d4;
     --softWhite:#f8fafc;
 }
@@ -51,26 +50,33 @@ body{
     font-family:'Great Vibes', cursive;
     font-size:3.2rem;
     color:var(--pinkGlow);
-    margin-bottom:20px;
+    margin-bottom:15px;
 }
 
 h1{
-    font-size:2.4rem;
+    font-size:2.2rem;
     margin-bottom:20px;
 }
 
 p{
     max-width:550px;
     line-height:2;
-    font-size:1.2rem;
+    font-size:1.15rem;
     margin:0 auto;
+}
+
+/* Hint Text */
+.hint{
+    margin-top:15px;
+    font-size:0.9rem;
+    opacity:0.7;
 }
 
 /* 💖 Card */
 .card{
     background:rgba(255,255,255,0.05);
     backdrop-filter:blur(12px);
-    padding:60px 50px;
+    padding:60px 40px;
     border-radius:30px;
     border:1px solid rgba(255,255,255,0.15);
     max-width:650px;
@@ -82,11 +88,11 @@ button{
     background:linear-gradient(45deg,#ec4899,#f472b6);
     border:none;
     color:white;
-    padding:14px 50px;
+    padding:14px 40px;
     border-radius:50px;
     font-size:0.9rem;
     cursor:pointer;
-    margin-top:40px;
+    margin-top:35px;
     transition:0.4s;
 }
 
@@ -105,7 +111,7 @@ button:hover{
     padding:20px;
     opacity:0;
     visibility:hidden;
-    transition:opacity 1.8s ease;
+    transition:opacity 1.5s ease;
     text-align:center;
 }
 
@@ -114,41 +120,43 @@ button:hover{
     visibility:visible;
 }
 
-/* 📸 Slideshow */
+/* 📸 Scrollable Gallery */
 .slider{
-    width:85%;
+    width:90%;
     max-width:900px;
     height:70vh;
-    position:relative;
     overflow:hidden;
     border-radius:30px;
     box-shadow:0 30px 80px rgba(0,0,0,0.8);
+    background: radial-gradient(circle, #1a1a1a, #000);
 }
 
-.slide{
-    position:absolute;
+.scroll-track{
+    display:flex;
+    height:100%;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    scroll-behavior:smooth;
+}
+
+.scroll-track img{
+    flex:0 0 100%;
     width:100%;
     height:100%;
-    opacity:0;
-    transition:opacity 2s ease;
+    object-fit:contain; /* 🔥 no cropping */
+    scroll-snap-align:center;
 }
 
-.slide.active{
-    opacity:1;
+/* Hide scrollbar */
+.scroll-track::-webkit-scrollbar{
+    display:none;
 }
 
-.slide img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    border-radius:30px;
-}
-
-/* 📱 MOBILE RESPONSIVE */
-@media (max-width: 768px){
+/* 📱 Mobile */
+@media (max-width:768px){
 
     .script{
-        font-size:2.4rem;
+        font-size:2.2rem;
     }
 
     h1{
@@ -161,19 +169,18 @@ button:hover{
     }
 
     .card{
-        padding:40px 25px;
+        padding:40px 20px;
         width:95%;
     }
 
     button{
-        padding:12px 30px;
+        padding:12px 28px;
         font-size:0.8rem;
-        margin-top:25px;
     }
 
     .slider{
-        width:95%;
         height:55vh;
+        width:95%;
     }
 }
 
@@ -196,19 +203,25 @@ button:hover{
             I found you… and suddenly, the world felt quieter,
             softer, and right.
         </p>
+        <div class="hint">✨ Tap anywhere to begin ✨</div>
         <button onclick="go('scene2')">Begin</button>
     </div>
 </div>
 
 <!-- 🌙 Scene 2 -->
 <div class="section" id="scene2" style="flex-direction:column;">
+    
     <div class="slider">
-        <div class="slide active"><img src="photo1.jpeg"></div>
-        <div class="slide"><img src="photo2.jpeg"></div>
-        <div class="slide"><img src="photo3.jpeg"></div>
-        <div class="slide"><img src="photo4.jpeg"></div>
-        <div class="slide"><img src="photo5.jpeg"></div>
+        <div class="scroll-track">
+            <img src="photo1.jpeg">
+            <img src="photo2.jpeg">
+            <img src="photo3.jpeg">
+            <img src="photo4.jpeg">
+            <img src="photo5.jpeg">
+        </div>
     </div>
+
+    <div class="hint">← Swipe left or right →</div>
     <button onclick="go('scene3')">Continue</button>
 </div>
 
@@ -281,17 +294,8 @@ function go(id){
     document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
     setTimeout(()=>{
         document.getElementById(id).classList.add('active');
-    },800);
+    },600);
 }
-
-/* Slideshow */
-let slides=document.querySelectorAll(".slide");
-let index=0;
-setInterval(()=>{
-    slides[index].classList.remove("active");
-    index=(index+1)%slides.length;
-    slides[index].classList.add("active");
-},4000);
 
 /* Messages */
 let messages=[
